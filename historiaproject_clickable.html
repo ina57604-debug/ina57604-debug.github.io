@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Хронологическая карта Второй мировой войны для СССР</title>
+  <style>
+    :root{
+      --bg:#f5f2eb;
+      --card:#ffffff;
+      --text:#1d1b19;
+      --muted:#5f5a54;
+      --line:#d7cec1;
+      --accent:#8b1e1e;
+      --accent2:#2f5e4e;
+      --gold:#9a7b3f;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(139,30,30,.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(47,94,78,.08), transparent 25%),
+        linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+      line-height:1.55;
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 56px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:22px;
+      align-items:stretch;
+      margin-bottom:22px;
+    }
+    .panel, .card{
+      background:rgba(255,255,255,.82);
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(215,206,193,.85);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero .panel{
+      padding:32px;
+      position:relative;
+      overflow:hidden;
+      min-height:280px;
+    }
+    .hero .panel:before{
+      content:"";
+      position:absolute; inset:-40px -60px auto auto;
+      width:240px; height:240px; border-radius:50%;
+      background:radial-gradient(circle, rgba(139,30,30,.16), rgba(139,30,30,0) 68%);
+      pointer-events:none;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--accent);
+      font-weight:700;
+    }
+    .kicker:before{
+      content:"";
+      width:34px; height:2px;
+      background:var(--accent);
+      border-radius:999px;
+    }
+    h1{
+      margin:14px 0 14px;
+      font-size:clamp(34px,5vw,58px);
+      line-height:1.02;
+      letter-spacing:-.03em;
+    }
+    .lead{
+      font-size:17px;
+      color:var(--muted);
+      max-width:62ch;
+      margin:0 0 22px;
+    }
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:#2a2724;
+      font-size:14px;
+    }
+    .hero .aside{
+      padding:24px;
+      display:grid;
+      gap:14px;
+    }
+    .metric{
+      padding:18px 18px 16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, #fff, #faf7f1);
+      border:1px solid var(--line);
+    }
+    .metric .label{
+      color:var(--muted);
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+    .metric .value{
+      font-size:26px;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+    .metric .desc{
+      color:var(--muted);
+      margin-top:6px;
+      font-size:14px;
+    }
+    .timeline{
+      position:relative;
+      padding:26px 0 0;
+      margin-top:18px;
+    }
+    .timeline:before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:0;
+      bottom:0;
+      width:3px;
+      transform:translateX(-50%);
+      background:linear-gradient(180deg, transparent, var(--line) 8%, var(--line) 92%, transparent);
+    }
+    .year{
+      position:relative;
+      display:grid;
+      grid-template-columns:1fr 120px 1fr;
+      gap:18px;
+      align-items:start;
+      margin-bottom:18px;
+    }
+    .year .center{
+      display:flex;
+      justify-content:center;
+      padding-top:14px;
+      position:relative;
+    }
+    .year .center span{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:104px;
+      min-height:52px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:#111;
+      color:#fff;
+      font-weight:800;
+      letter-spacing:.04em;
+      box-shadow:var(--shadow);
+    }
+    .event, .milestone{
+      padding:18px 18px 16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(215,206,193,.95);
+      box-shadow:var(--shadow);
+    }
+    .event h3, .milestone h3{
+      margin:0 0 8px;
+      font-size:18px;
+      line-height:1.25;
+    }
+    .event p, .milestone p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .event .date{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+      color:var(--accent);
+      margin-bottom:10px;
+    }
+    .left{grid-column:1}
+    .right{grid-column:3}
+    .section-title{
+      margin:30px 0 14px;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+    .card{
+      padding:20px;
+    }
+    .card h4{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+    .card p, .card li{
+      color:var(--muted);
+      margin:0;
+      font-size:14px;
+    }
+    .card ul{
+      margin:10px 0 0 18px;
+      padding:0;
+    }
+    .footer-note{
+      margin-top:20px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .topline{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+    .smallbadge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      background:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+    }
+    .smallbadge i{
+      width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;
+    }
+
+    .event-link{
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      border-radius:20px;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      outline:none;
+    }
+    .event-link:hover .event,
+    .event-link:focus-visible .event{
+      transform: translateY(-2px);
+      border-color: rgba(139,30,30,.35);
+      box-shadow: 0 14px 34px rgba(0,0,0,.11);
+    }
+    .event{
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      cursor:pointer;
+    }
+    .detail-section{
+      margin-top:34px;
+      padding-top:6px;
+    }
+    .detail-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+    .detail-card{
+      padding:22px;
+      border-radius:20px;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(215,206,193,.95);
+      box-shadow:var(--shadow);
+    }
+    .detail-card h3{
+      margin:0 0 10px;
+      font-size:20px;
+      line-height:1.25;
+    }
+    .detail-card .date{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+      color:var(--accent);
+      margin-bottom:10px;
+    }
+    .detail-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .backlink{
+      display:inline-flex;
+      margin-top:12px;
+      color:var(--accent2);
+      font-weight:700;
+      text-decoration:none;
+      font-size:14px;
+    }
+    .backlink:hover{text-decoration:underline}
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .timeline:before{left:18px; transform:none}
+      .year{grid-template-columns:1fr; margin-left:30px}
+      .year .center{justify-content:flex-start; padding-left:0; order:-1}
+      .left,.right{grid-column:auto}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="top">
+    <div class="hero">
+      <section class="panel">
+        <div class="kicker">История СССР • 1939 – 1945</div>
+        <h1>Хронологическая карта Второй мировой войны для СССР</h1>
+        <p class="lead">
+          Хронология по годам основным действий произошедших во время ВОВ.
+        </p>
+        <div class="chips">
+          <span class="chip">Пакт Молотова - Риббентропа</span>
+          <span class="chip">Великая Отечественная война</span>
+          <span class="chip">Сталинград</span>
+          <span class="chip">Курская дуга</span>
+          <span class="chip">Берлинская операция</span>
+        </div>
+      </section>
+
+      <aside class="panel aside">
+        <div class="metric">
+          <div class="label">Старт войны для СССР</div>
+          <div class="value">22 июня 1941</div>
+          <div class="desc">Нападение Германии на СССР и начало Великой Отечественной войны.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Перелом</div>
+          <div class="value">1942 – 1943</div>
+          <div class="desc">Сталинградская битва и победа на Курской дуге изменили ход войны.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Итог</div>
+          <div class="value">9 мая 1945</div>
+          <div class="desc">Капитуляция Германии и Победа СССР в Великой Отечественной войне.</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="topline">
+      <div class="smallbadge"><i></i> Хронология по годам</div>
+      <div class=""></div>
+    </div>
+
+    <section class="timeline">
+      <div class="year">
+        <a class="event-link" href="#full-detail-pact"><article id="detail-pact" class="event left">
+          <div class="date">23 августа 1939</div>
+          <h3>Пакт Молотова - Риббентропа</h3>
+          <p>СССР и Германия подписывают договор о ненападении с секретными протоколами о разделении сфер влияния.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1939</span></div>
+        <a class="event-link" href="#full-detail-poland"><article id="detail-poland" class="event right">
+          <div class="date">17 сентября 1939</div>
+          <h3>Ввод войск в восточную Польшу</h3>
+          <p>Красная армия входит в восточные районы Польши после начала германского вторжения.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+
+      <div class="year">
+        <a class="event-link" href="#full-detail-finland"><article id="detail-finland" class="event left">
+          <div class="date">30 ноября 1939 - 13 марта 1940</div>
+          <h3>Советско-финляндская война</h3>
+          <p>Зимняя война завершилась Московским мирным договором; СССР получил территориальные уступки.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1940</span></div>
+        <a class="event-link" href="#full-detail-baltics"><article id="detail-baltics" class="event right">
+          <div class="date">3 июля 1940</div>
+          <h3>Присоединение Прибалтики и Бессарабии</h3>
+          <p>В состав СССР входят Латвия, Литва, Эстония, а также Бессарабия и Северная Буковина.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+
+      <div class="year">
+        <a class="event-link" href="#full-detail-invasion"><article id="detail-invasion" class="event left">
+          <div class="date">22 июня 1941</div>
+          <h3>Нападение Германии на СССР</h3>
+          <p>Начало операции «Барбаросса» и Великой Отечественной войны.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1941</span></div>
+        <a class="event-link" href="#full-detail-defense"><article id="detail-defense" class="event right">
+          <div class="date">22 июня - 23 июля 1941</div>
+          <h3>Оборона Бреста, Смоленска и Москвы</h3>
+          <p>Первые тяжёлые оборонительные сражения; битва за Москву становится первым крупным срывом немецкого плана блицкрига.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+
+      <div class="year">
+        <a class="event-link" href="#full-detail-stalingrad"><article id="detail-stalingrad" class="event left">
+          <div class="date">Июль 1942 - 2 февраля 1943</div>
+          <h3>Сталинградская битва</h3>
+          <p>Одно из решающих сражений войны. Победа Красной армии стала стратегическим переломом.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1942</span></div>
+        <a class="event-link" href="#full-detail-evacuation"><article id="detail-evacuation" class="event right">
+          <div class="date">июль - декабрь 1942</div>
+          <h3>Эвакуация промышленности и мобилизация тыла</h3>
+          <p>Перевод заводов на восток и перестройка экономики под нужды фронта усилили обороноспособность страны.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+
+      <div class="year">
+        <a class="event-link" href="#full-detail-kursk"><article id="detail-kursk" class="event left">
+          <div class="date">5 июля - 23 августа 1943</div>
+          <h3>Курская битва</h3>
+          <p>Крупнейшее танковое сражение войны. После победы СССР переходит к стратегическому наступлению.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1943</span></div>
+        <a class="event-link" href="#full-detail-liberation1943"><article id="detail-liberation1943" class="event right">
+          <div class="date">3 - 23 августа 1943</div>
+          <h3>Освобождение Орла, Белгорода и Харькова</h3>
+          <p>Красная армия освобождает важные города и закрепляет инициативу на восточном фронте.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+
+      <div class="year">
+        <a class="event-link" href="#full-detail-bagration"><article id="detail-bagration" class="event left">
+          <div class="date">23 июня - 29 августа1944</div>
+          <h3>Операция «Багратион»</h3>
+          <p>Одна из крупнейших наступательных операций войны; разгром группы армий «Центр» и освобождение Белоруссии.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1944</span></div>
+        <a class="event-link" href="#full-detail-ussr-liberation"><article id="detail-ussr-liberation" class="event right">
+          <div class="date">февраль - июль 1944</div>
+          <h3>Освобождение территории СССР</h3>
+          <p>Красная армия завершает освобождение советских республик и переносит боевые действия в Восточную Европу.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+
+      <div class="year">
+        <a class="event-link" href="#full-detail-berlin"><article id="detail-berlin" class="event left">
+          <div class="date">12 января - 9 мая 1945</div>
+          <h3>Финальные операции и штурм Берлина</h3>
+          <p>Висло-Одерская операция, Берлинская операция и капитуляция Германии 8 мая; в СССР день Победы отмечается 9 мая.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+        <div class="center"><span>1945</span></div>
+        <a class="event-link" href="#full-detail-japan"><article id="detail-japan" class="event right">
+          <div class="date">9 Август - 2 Сентября 1945</div>
+          <h3>Война с Японией</h3>
+          <p>СССР вступает в войну против Японии, проводит Маньчжурскую операцию и завершает участие во Второй мировой войне.</p>
+      <p style="margin-top:10px;color:var(--accent2);font-weight:700;font-size:13px;">Подробнее →</p>
+        </article></a>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <div class="topline">
+        <div class="smallbadge"><i></i> Подробная информация о событиях</div>
+        <a class="backlink" href="#top">Наверх</a>
+      </div>
+      <div class="detail-grid">
+
+        <article class="detail-card" id="full-detail-pact">
+          <div class="date">23 августа 1939</div>
+          <h3>Пакт Молотова - Риббентропа</h3>
+          <p>Договор о ненападении между СССР и Германией стал одним из ключевых дипломатических эпизодов предвоенного периода. К нему прилагались секретные протоколы о разделении сфер влияния в Восточной Европе. В школьном проекте этот пункт удобно объяснять как шаг, который отсрочил прямой конфликт, но не предотвратил его.</p>
+          <a class="backlink" href="#full-detail-pact">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-poland">
+          <div class="date">17 сентября 1939</div>
+          <h3>Ввод войск в восточную Польшу</h3>
+          <p>Ввод Красной армии в восточные районы Польши произошёл после начала германского вторжения и был связан с изменением границ и сфер влияния в регионе. Этот эпизод часто рассматривают как часть общей перестройки политической карты Европы в 1939 году.</p>
+          <a class="backlink" href="#full-detail-poland">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-finland">
+          <div class="date">30 ноября 1939 - 13 марта 1940</div>
+          <h3>Советско-финляндская война</h3>
+          <p>Зимняя война показала слабые места Красной армии в начале конфликта, но также привела к важным выводам для последующей войны. По Московскому мирному договору СССР получил ряд территориальных уступок и усилил безопасность северо-западных границ.</p>
+          <a class="backlink" href="#full-detail-finland">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-baltics">
+          <div class="date">3 июля 1940</div>
+          <h3>Присоединение Прибалтики и Бессарабии</h3>
+          <p>Летом 1940 года в состав СССР вошли Латвия, Литва, Эстония, а также Бессарабия и Северная Буковина. Этот процесс существенно изменил границы страны и предопределил дальнейшую сложную политическую и военную ситуацию на западных рубежах.</p>
+          <a class="backlink" href="#full-detail-baltics">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-invasion">
+          <div class="date">22 июня 1941</div>
+          <h3>Нападение Германии на СССР</h3>
+          <p>Операция «Барбаросса» стала началом Великой Отечественной войны. Германия рассчитывала на быстрый разгром СССР, но сопротивление советских войск сорвало планы блицкрига и сделало войну затяжной.</p>
+          <a class="backlink" href="#full-detail-invasion">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-defense">
+          <div class="date">22 июня - 23 июля 1941</div>
+          <h3>Оборона Бреста, Смоленска и Москвы</h3>
+          <p>Первые оборонительные сражения показали, что СССР способен удерживать фронт даже под мощным ударом. Особое значение имела битва за Москву: она стала первым крупным срывом немецкого плана молниеносной войны.</p>
+          <a class="backlink" href="#full-detail-defense">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-stalingrad">
+          <div class="date">Июль 1942 - 2 февраля 1943</div>
+          <h3>Сталинградская битва</h3>
+          <p>Сталинградская битва стала главным символом перелома войны. Окружение и разгром армии Паулюса резко изменили стратегическую инициативу и показали, что вермахт потерял способность вести войну только наступлением.</p>
+          <a class="backlink" href="#full-detail-stalingrad">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-evacuation">
+          <div class="date">июль - декабрь 1942</div>
+          <h3>Эвакуация промышленности и мобилизация тыла</h3>
+          <p>Перенос предприятий на восток стал огромной организационной задачей. Благодаря эвакуации заводов и перестройке экономики СССР сумел сохранить производство оружия, боеприпасов и техники в условиях войны.</p>
+          <a class="backlink" href="#full-detail-evacuation">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-kursk">
+          <div class="date">5 июля - 23 августа 1943</div>
+          <h3>Курская битва</h3>
+          <p>Курская битва стала крупнейшим танковым сражением Второй мировой войны. После её завершения стратегическая инициатива окончательно перешла к Красной армии, а Германия уже не смогла восстановить прежнюю силу наступления.</p>
+          <a class="backlink" href="#full-detail-kursk">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-liberation1943">
+          <div class="date">3 - 23 августа 1943</div>
+          <h3>Освобождение Орла, Белгорода и Харькова</h3>
+          <p>Летом 1943 года советские войска освободили важные города и укрепили успех после Курской битвы. Это стало подтверждением того, что Красная армия перешла от обороны к устойчивому наступлению.</p>
+          <a class="backlink" href="#full-detail-liberation1943">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-bagration">
+          <div class="date">23 июня - 29 августа 1944</div>
+          <h3>Операция «Багратион»</h3>
+          <p>Операция «Багратион» считается одной из самых успешных наступательных операций Красной армии. Был разгромлен центр немецкой группы армий, освобождена Белоруссия и открыт путь к дальнейшему продвижению на запад.</p>
+          <a class="backlink" href="#full-detail-bagration">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-ussr-liberation">
+          <div class="date">февраль - июль 1944</div>
+          <h3>Освобождение территории СССР</h3>
+          <p>К 1944 году советские войска освободили большую часть оккупированной территории СССР. После этого боевые действия окончательно переместились в Восточную Европу, где шло добивание нацистской Германии.</p>
+          <a class="backlink" href="#full-detail-ussr-liberation">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-berlin">
+          <div class="date">12 января - 9 мая 1945</div>
+          <h3>Финальные операции и штурм Берлина</h3>
+          <p>Висло-Одерская и Берлинская операции стали последним этапом войны в Европе. 8 мая Германия подписала акт о капитуляции, а в СССР праздник Победы отмечается 9 мая.</p>
+          <a class="backlink" href="#full-detail-berlin">Вернуться к событию</a>
+        </article>
+
+        <article class="detail-card" id="full-detail-japan">
+          <div class="date">9 Август - 2 Сентября 1945</div>
+          <h3>Война с Японией</h3>
+          <p>После разгрома Германии СССР вступил в войну против Японии и провёл Маньчжурскую операцию. Это завершило участие СССР во Второй мировой войне и ускорило капитуляцию Японии.</p>
+          <a class="backlink" href="#full-detail-japan">Вернуться к событию</a>
+        </article>
+
+      </div>
+    </section>
+
+    <h2 class="section-title">Краткий итог</h2>
+    <div class="grid">
+      <article class="card">
+        <h4>Военный результат</h4>
+        <p>СССР сыграл решающую роль в разгроме нацистской Германии на Восточном фронте. Не без помощи Союзников.</p>
+      </article>
+      <article class="card">
+        <h4>Поворотные точки</h4>
+        <ul>
+          <li>Москва - первый срыв блицкрига.</li>
+          <li>Сталинград - стратегический перелом.</li>
+          <li>Курск - переход к наступлению.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>Список литературы</h4>
+        <ul>
+          <li>Великая Отечественная война 1941-1945.М.:Воениздат.
+</li>
+          <li>Архивы России.</li>
+          <li>Мин.Обороны РФ - раздел "Память народа".</li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="footer-note">
+    </p>
+  </div>
+</body>
+</html>
